@@ -1,9 +1,9 @@
 // ボタンの状態を切り替え
 function toggleStateBuggy(element) {
     if (element.textContent === "〇") {
-        element.textContent = "✖️";
+        element.textContent = "×";
         element.style.backgroundColor = "#f88";
-    } else if (element.textContent === "✖️") {
+    } else if (element.textContent === "×") {
         element.textContent = "△";
         element.style.backgroundColor = "#ff0";
     } else if (element.textContent === "△") {
@@ -17,9 +17,9 @@ function toggleStateBuggy(element) {
 
 function toggleStateArgo(element) {
     if (element.textContent === "〇") {
-        element.textContent = "✖️";
+        element.textContent = "×";
         element.style.backgroundColor = "#f88";
-    } else if (element.textContent === "✖️") {
+    } else if (element.textContent === "×") {
         element.textContent = "ー";
         element.style.backgroundColor = "#fff";
     } else if (element.textContent === "ー") {

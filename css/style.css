@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: monospace;
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,7 +9,6 @@ body {
     place-content: center;
 }
 .container {
-    width: 50%;
     text-align: center;
     justify-items: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
@@ -52,6 +51,51 @@ body {
     margin: 5px 0;
     padding: 5px;
     border-bottom: 1px solid #ddd;
+}
+.available {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #8f8;
+}
+.full {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f88;
+}
+.few-seats {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #ff0;
+}
+.unavailable {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.seat-status {
+    width: 600px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    margin: 20px;
+}
+.seat-status span {
+    font-size: 24px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
 }
 .toggle-btn {
     font-size: 30px;

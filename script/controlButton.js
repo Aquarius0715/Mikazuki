@@ -4,7 +4,13 @@ function setAllButtons(state) {
     const buttons = document.querySelectorAll("#" + screenId);
     buttons.forEach(button => {
         button.textContent = state;
-        button.style.backgroundColor = state === "〇" ? "#8f8" : "#f88";
+        if (state === "〇") {
+            button.style.backgroundColor = "#8f8";    
+        } else if (state === "×") {
+            button.style.backgroundColor = "#f88";
+        } else if (state === "ー") {
+            button.style.backgroundColor = "#fff";
+        }
     });
 }
 
