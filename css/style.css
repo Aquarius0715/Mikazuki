@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    place-content: center;
+}
+.container {
+    width: 50%;
+    text-align: center;
+    justify-items: center;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.container.shifted {
+    transform: translateY(-114px); /* 全体を上に移動 */
+}
+.box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+.column {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 50px;
+    text-align: center;
+}
+.column-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.image {
+    width: 50%;
+    height: auto;
+}
+.time-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+.toggle-btn {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #8f8;
+}
+.control-buttons {
+    margin: 10px 0;
+    display: flexbox;
+    justify-content: center;
+    padding: 20px;
+    border: black;
+    border-radius: 10px;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.control-buttons.hidden {
+    transform: translateY(-100%); /* 上に隠れる */
+    opacity: 0; /* 見えなくする */
+}
+.control-buttons button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: #ffffff;
+    border-radius: 5px;
+    background-color: #2f00ff;
+    color: white;
+}
+.control-buttons button:hover {
+    background-color: #0056b3;
+}
+.screen {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+.screen.active {
+    display: block;
+}

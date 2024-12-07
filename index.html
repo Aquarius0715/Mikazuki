@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikazuki Resure Reservation Status</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+        <div class="control-buttons" id="controlButtons">
+            <button onclick="setAllButtons('〇')">すべてを〇にする</button>
+            <button onclick="setAllButtons('✖️')">すべてを×にする</button>
+            <button onclick="toggleSwitchScreen(this)">自動遷移を停止</button>
+            <button onclick="switchScreen()">次ページへ</button>
+        </div>
+    <div class="container" id="container">
+        <div class="screen active" id="argo_screen">
+            <div class="column-title">アーゴ陸上探検ツアー</div>
+                <span onclick="toggleControlButtons()">
+                    <img src="image/argo_image.png" alt="アーゴ陸上探検ツアー" class="image">
+                </span>
+            <div class="box">
+                <div class="column">
+                    <div class="time-item">
+                        <span>10:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>10:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>11:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>11:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>12:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>12:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="time-item">
+                        <span>13:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>13:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>14:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>14:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>15:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>15:30</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>16:00</span>
+                        <span class="toggle-btn" id="argo_time" onclick="toggleStateArgo(this)">〇</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen" id="buggy_screen">
+            <div class="column-title">周回コース</div>
+                <span onclick="toggleControlButtons()">
+                    <img src="image/buggy_image.png" alt="周回コース" class="image">
+                </span>
+            <div class="box">
+                <div class="column">
+                    <div class="time-item">
+                        <span>10:15</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>10:45</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>11:15</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>11:45</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>13:15</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>13:45</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="time-item">
+                        <span>14:15</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>15:15</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                    <div class="time-item">
+                        <span>15:45</span>
+                        <span class="toggle-btn" id="buggy_time" onclick="toggleStateBuggy(this)">〇</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/switchScreen.js"></script>
+    <script src="script/controlButton.js"></script>
+    <script src="script/toggleButton.js"></script>
+
+</body>
+</html>
