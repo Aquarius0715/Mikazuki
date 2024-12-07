@@ -35,6 +35,11 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
 }
+.column-subtitle {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 .image {
     width: 50%;
     height: auto;
