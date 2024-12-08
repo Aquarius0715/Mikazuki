@@ -86,7 +86,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0px;
+    padding: 10px;
     background-color: #f4f4f4;
     border-radius: 8px;
     margin: 20px;
