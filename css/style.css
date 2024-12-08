@@ -94,7 +94,7 @@ body {
 .seat-status span {
     align-items: center;
     font-size: 24px;
-    padding: 10px;
+    padding: 0px;
     border: 2px solid #ccc;
     border-radius: 5px;
     margin: 10px;
