@@ -40,8 +40,7 @@ function toggleVisibility() {
 
         function disablePastButtons() {
             const now = new Date(); // 現在時刻を取得
-            const buttons = document.querySelectorAll(".toggle-btn");
-        
+            let buttons = document.querySelectorAll(".toggle-btn-unavailable, .toggle-btn");
             buttons.forEach(button => {
                 const buttonTime = button.getAttribute("date-time");
                 if (buttonTime) {
@@ -59,5 +58,5 @@ function toggleVisibility() {
             });
         }
 
-setInterval(disablePastButtons, 60000); // 60秒ごとにチェック
+setInterval(disablePastButtons, 1000); // 60秒ごとにチェック
 disablePastButtons(); // 初期実行
