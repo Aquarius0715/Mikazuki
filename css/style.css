@@ -106,6 +106,13 @@ body {
     border-radius: 5px;
     background-color: #8f8;
 }
+.toggle-btn.unavailable {
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #ccc;
+}
 .control-buttons {
     margin: 10px 0;
     display: flexbox;
