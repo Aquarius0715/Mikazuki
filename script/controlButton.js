@@ -37,3 +37,27 @@ function toggleVisibility() {
                 container.classList.remove('shifted');
             }
         }
+
+        function disablePastButtons() {
+            const now = new Date(); // 現在時刻を取得
+            const buttons = document.querySelectorAll(".toggle-btn");
+        
+            buttons.forEach(button => {
+                const buttonTime = button.getAttribute("date-time");
+                if (buttonTime) {
+                    const [hour, minute] = buttonTime.split(":").map(Number);
+                    const buttonDate = new Date();
+                    buttonDate.setHours(hour, minute, 0, 0);
+        
+                    if (now > buttonDate) {
+                        button.textContent = "ー";
+                        button.style.backgroundColor = "#fff";
+                        button.classList.add("toggle-btn-unavailable"); // クラスを追加
+                        button.onclick = null; // ボタンのクリックを無効化
+                    }
+                }
+            });
+        }
+
+setInterval(disablePastButtons, 60000); // 60秒ごとにチェック
+disablePastButtons(); // 初期実行
