@@ -19,11 +19,11 @@ body {
 .box {
     display: grid;
     grid-template-columns: repeat(4, auto);
-    gap: 5px;
+    gap: 20px;
     margin-top: 0px;
 }
 .column {
-    width: 195px;
+    width: 250px;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
