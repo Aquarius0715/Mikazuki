@@ -66,6 +66,26 @@ function toggleVisibility() {
             });
         }
 
+        function toggleFullScreen(element = document.documentElement) {
+            if (!document.fullscreenElement) {
+                // フルスクリーンにする
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) { // Safari用
+                    element.webkitRequestFullscreen();
+                } else if (element.msRequestFullscreen) { // IE11用
+                    element.msRequestFullscreen();
+                }
+            } else {
+                // フルスクリーンを終了する
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { // Safari用
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE11用
+                    document.msExitFullscreen();
+                }
+            }
+        }
 setInterval(disablePastButtons, 1000); // 60秒ごとにチェック
 disablePastButtons(); // 初期実行
-document.body.requestFullscreen();	
