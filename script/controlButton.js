@@ -45,8 +45,16 @@ function toggleVisibility() {
                 const buttonTime = button.getAttribute("date-time");
                 if (buttonTime) {
                     const [hour, minute] = buttonTime.split(":").map(Number);
-                    const buttonDate = new Date();
+                    let buttonDate = new Date();
                     buttonDate.setHours(hour, minute, 0, 0);
+
+                    if (button.getAttribute("id") === "buggy_time") {
+                        if (buttonTime === "10:15") {
+                            buttonDate -= 13 * 60 * 1000;
+                        } else {
+                            buttonDate -= 15 * 60 * 1000;
+                        }
+                    }
         
                     if (now > buttonDate) {
                         button.textContent = "ー";
