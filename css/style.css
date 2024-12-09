@@ -10,6 +10,7 @@ body {
 .container {
     z-index: auto;
     text-align: center;
+    align-items: center;
     justify-items: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
 }
@@ -20,12 +21,11 @@ body {
     display: grid;
     grid-template-columns: repeat(4, auto);
     gap: 20px;
-    margin-top: 0px;
 }
 .buggy_box {
     display: grid;
     grid-template-columns: repeat(3, auto);
-    gap: 176px;
+    gap: 20px;
     margin-top: 0px; 
 }
 .column {
@@ -151,8 +151,12 @@ body {
 }
 .screen {
     display: none;
+    width: 1280px;
     padding: 20px;
     border: 1px solid #ddd;
+    align-items: center;
+    place-content: center;
+    place-items: center;
     border-radius: 5px;
     background-image: url("../image/background.png");
     background-size: 100%;
