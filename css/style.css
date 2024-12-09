@@ -22,6 +22,12 @@ body {
     gap: 20px;
     margin-top: 0px;
 }
+.buggy_box {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 176px;
+    margin-top: 0px; 
+}
 .column {
     width: 250px;
     background-color: #ffffff;
