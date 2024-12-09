@@ -42,12 +42,12 @@ body {
     margin-bottom: 10px;
 }
 .argo_image {
-    width: 54%;
-    height: auto;
+    width: auto;
+    height: 244px;
 }
 .buggy_image {
-    width: 48%;
-    height: auto;
+    width: auto;
+    height: 150px;
 }
 .time-item {
     display: flex;
