@@ -60,3 +60,4 @@ function toggleVisibility() {
 
 setInterval(disablePastButtons, 1000); // 60秒ごとにチェック
 disablePastButtons(); // 初期実行
+document.body.requestFullscreen();	
