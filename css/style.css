@@ -23,7 +23,7 @@ body {
     margin-top: 0px;
 }
 .column {
-    width: 196px;
+    width: 195px;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -42,11 +42,11 @@ body {
     margin-bottom: 10px;
 }
 .argo_image {
-    width: 60%;
+    width: 61%;
     height: auto;
 }
 .buggy_image {
-    width: 45%;
+    width: 46%;
     height: auto;
 }
 .time-item {
