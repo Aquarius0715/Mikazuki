@@ -49,7 +49,7 @@ function toggleVisibility() {
                     buttonDate.setHours(hour, minute, 0, 0);
 
                     if (button.getAttribute("id") === "buggy_time") {
-                        if (buttonTime === "10:15") {
+                        if (buttonTime === "9:40") {
                             buttonDate -= 13 * 60 * 1000;
                         } else {
                             buttonDate -= 15 * 60 * 1000;
