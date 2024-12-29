@@ -7,8 +7,8 @@ const targetPath = '/reservation_ledgers/2024-12-27';
 
 function sendLoginRequest() {
     const loginData = querystring.stringify({
-        username: 'your-username',
-        password: 'your-password',
+        username: 'rezya-bu@mikazuki.co.jp',
+        password: 'rezya7116',
     });
 
     const loginOptions = {
