@@ -1,68 +1,108 @@
-(async () => {
-    const loginURL = 'https://mikazuki.urkt.in/login';
-    const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
-    const targetURL = `https://mikazuki.urkt.in/reservation_ledgers/${targetDate}`;
+const https = require('https');
+const querystring = require('querystring');
 
-    // ログイン情報
-    const loginData = {
-        username: 'rezya-bu@mikazuki.co.jp', // ユーザー名
-        password: 'rezya7116', // パスワード
+// ログイン用データ
+const loginData = querystring.stringify({
+    username: 'your-username', // ログイン情報を入力
+    password: 'your-password',
+});
+
+// ログインリクエストのオプション
+const loginOptions = {
+    hostname: 'mikazuki.urkt.in',
+    path: '/login',
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(loginData),
+    },
+};
+
+// ログイン処理
+const loginRequest = https.request(loginOptions, (loginResponse) => {
+    let loginBody = '';
+
+    loginResponse.on('data', (chunk) => {
+        loginBody += chunk;
+    });
+
+    loginResponse.on('end', () => {
+        console.log('ログイン成功');
+        const cookies = loginResponse.headers['set-cookie']; // Cookieを取得
+
+        if (!cookies) {
+            console.error('Cookieが取得できませんでした');
+            return;
+        }
+
+        // ログイン後のページへアクセス
+        accessProtectedPage(cookies);
+    });
+});
+
+loginRequest.on('error', (error) => {
+    console.error('ログインエラー:', error);
+});
+
+loginRequest.write(loginData);
+loginRequest.end();
+
+// 認証後に保護されたページへアクセス
+function accessProtectedPage(cookies) {
+    const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
+    const targetPath = `/reservation_ledgers/${targetDate}`;
+
+    const protectedOptions = {
+        hostname: 'mikazuki.urkt.in',
+        path: targetPath,
+        method: 'GET',
+        headers: {
+            'Cookie': cookies.join('; '), // ログイン時に取得したCookieを送信
+        },
     };
 
-    try {
-        // ログインリクエスト
-        const loginResponse = await fetch(loginURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(loginData), // フォームデータをエンコード
+    const protectedRequest = https.request(protectedOptions, (protectedResponse) => {
+        let protectedBody = '';
+
+        protectedResponse.on('data', (chunk) => {
+            protectedBody += chunk;
         });
 
-        if (!loginResponse.ok) {
-            throw new Error(`ログイン失敗: HTTP ${loginResponse.status}`);
-        }
+        protectedResponse.on('end', () => {
+            console.log('保護されたページ取得成功');
 
-        // Cookieを取得
-        const cookies = loginResponse.headers.get('set-cookie');
-        if (!cookies) {
-            throw new Error('ログイン成功しましたが、Cookieが見つかりません');
-        }
-
-        // 認証済みリクエストで対象ページにアクセス
-        const targetResponse = await fetch(targetURL, {
-            method: 'GET',
-            headers: {
-                'Cookie': cookies, // ログイン時に取得したCookieを使用
-            },
+            // HTML解析してテーブルデータを抽出
+            parseHTML(protectedBody);
         });
+    });
 
-        if (!targetResponse.ok) {
-            throw new Error(`対象ページの取得に失敗: HTTP ${targetResponse.status}`);
-        }
+    protectedRequest.on('error', (error) => {
+        console.error('保護ページアクセスエラー:', error);
+    });
 
-        // ページHTMLを取得
-        const htmlText = await targetResponse.text();
+    protectedRequest.end();
+}
 
-        // HTMLをパースしてXPathでテーブルを取得
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, 'text/html');
+// HTMLを解析してテーブルデータを取得
+function parseHTML(html) {
+    const { JSDOM } = require('jsdom'); // HTML解析のために必要
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
 
-        const xpath = '/html/body/div[2]/div[2]/div/div[3]/div[2]/div/div[1]/table/tbody';
-        const xpathResult = doc.evaluate(xpath, doc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    // XPathで指定されたテーブルの取得
+    const xpath = '/html/body/div[2]/div[2]/div/div[3]/div[2]/div/div[1]/table/tbody';
+    const xpathResult = document.evaluate(xpath, document, null, dom.window.XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const tableBody = xpathResult.singleNodeValue;
 
-        const tableBody = xpathResult.singleNodeValue;
-        if (!tableBody) {
-            throw new Error('指定されたテーブルが見つかりません');
-        }
-
-        // テーブルデータを解析
-        const rows = tableBody.querySelectorAll('tr');
-        rows.forEach((row, index) => {
-            const cells = row.querySelectorAll('td, th');
-            console.log(`Row ${index + 1}:`, [...cells].map(cell => cell.textContent.trim()));
-        });
-    } catch (error) {
-        console.error('エラー:', error);
+    if (!tableBody) {
+        console.error('指定されたテーブルが見つかりません');
+        return;
     }
-})();
+
+    // テーブルデータを取得
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach((row, index) => {
+        const cells = row.querySelectorAll('td, th');
+        console.log(`Row ${index + 1}:`, [...cells].map(cell => cell.textContent.trim()));
+    });
+}
