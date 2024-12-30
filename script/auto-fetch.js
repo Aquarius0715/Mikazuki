@@ -46,9 +46,9 @@ function extractCsrfToken(html) {
 function sendLoginRequest(csrfToken) {
     const loginData = querystring.stringify({
         'authenticity_token': csrfToken,
-        'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ログインIDを設定
-        'user_session[password]': 'rezya7116', // パスワードを設定
-        'user_session[remember_me]': '0', // ログイン状態を保持するか
+        'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名
+        'user_session[password]': 'rezya7116', // パスワード
+        'user_session[remember_me]': '0', // ログイン状態を保持しない
     });
 
     const options = {
@@ -60,6 +60,7 @@ function sendLoginRequest(csrfToken) {
             'Content-Length': Buffer.byteLength(loginData),
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Referer': 'https://mikazuki.urkt.in/login',
+            'Origin': 'https://mikazuki.urkt.in',
         },
     };
 
@@ -95,7 +96,7 @@ function sendLoginRequest(csrfToken) {
 
 // 保護されたページにアクセス
 function accessProtectedPage(cookies) {
-    const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
+    const targetDate = new Date().toISOString().split('T')[0];
     const path = `/reservation_ledgers/${targetDate}`;
 
     const options = {
