@@ -3,8 +3,8 @@ const querystring = require('querystring');
 
 // ログイン用データ
 const loginData = querystring.stringify({
-    username: 'your-username',
-    password: 'your-password',
+    username: 'rezya-bu@mikazuki.co.jp',
+    password: 'rezya7116',
 });
 
 // ログインリクエストのオプション
