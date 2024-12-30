@@ -1,11 +1,10 @@
 const https = require('https');
 const querystring = require('querystring');
-const { JSDOM } = require('jsdom');
 
 // ログイン用データ
 const loginData = querystring.stringify({
-    username: 'rezya-bu@mikazuki.co.jp', // ログイン用のユーザー名
-    password: 'rezya7116', // ログイン用のパスワード
+    username: 'your-username',
+    password: 'your-password',
 });
 
 // ログインリクエストのオプション
@@ -16,12 +15,9 @@ const loginOptions = {
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(loginData),
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', // User-Agentを追加
     },
 };
-
-// スクレイピング対象のURL
-const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
-const targetPath = `/reservation_ledgers/${targetDate}`;
 
 // ログイン処理
 function loginAndScrape() {
@@ -34,13 +30,18 @@ function loginAndScrape() {
 
         res.on('end', () => {
             console.log('ログイン成功');
-            const cookies = res.headers['set-cookie']; // Cookieを取得
+            console.log('レスポンスヘッダー:', res.headers);
+
+            // Set-Cookieヘッダーを取得
+            const cookies = res.headers['set-cookie'];
             if (!cookies) {
-                console.error('Cookieが取得できませんでした');
+                console.error('Cookieが取得できませんでした。');
                 return;
             }
 
-            // ログイン後のページをスクレイピング
+            console.log('取得したCookie:', cookies);
+
+            // 保護されたページへアクセス
             accessProtectedPage(cookies);
         });
     });
@@ -55,12 +56,15 @@ function loginAndScrape() {
 
 // 保護されたページへのアクセスとスクレイピング
 function accessProtectedPage(cookies) {
+    const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
+    const targetPath = `/reservation_ledgers/${targetDate}`;
+
     const options = {
         hostname: 'mikazuki.urkt.in',
         path: targetPath,
         method: 'GET',
         headers: {
-            'Cookie': cookies.join('; '), // ログイン時に取得したCookieを設定
+            'Cookie': cookies.join('; '), // Cookieを設定
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         },
     };
@@ -74,7 +78,7 @@ function accessProtectedPage(cookies) {
 
         res.on('end', () => {
             console.log('保護ページ取得成功');
-            scrapeTable(body);
+            console.log('HTML:', body); // 必要に応じて解析
         });
     });
 
@@ -83,29 +87,6 @@ function accessProtectedPage(cookies) {
     });
 
     req.end();
-}
-
-// HTMLを解析してテーブルデータを取得
-function scrapeTable(html) {
-    const dom = new JSDOM(html);
-    const document = dom.window.document;
-
-    // XPathで指定されたテーブルの取得
-    const xpath = '/html/body/div[2]/div[2]/div/div[3]/div[2]/div/div[1]/table/tbody';
-    const xpathResult = document.evaluate(xpath, document, null, dom.window.XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-
-    const tableBody = xpathResult.singleNodeValue;
-    if (!tableBody) {
-        console.error('指定されたテーブルが見つかりません');
-        return;
-    }
-
-    // テーブルデータを取得
-    const rows = tableBody.querySelectorAll('tr');
-    rows.forEach((row, index) => {
-        const cells = row.querySelectorAll('td, th');
-        console.log(`Row ${index + 1}:`, [...cells].map(cell => cell.textContent.trim()));
-    });
 }
 
 // ログインしてスクレイピング開始
