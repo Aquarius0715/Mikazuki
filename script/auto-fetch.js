@@ -1,78 +1,81 @@
 const https = require('https');
 const querystring = require('querystring');
 
-// ログイン用データ
+// ログインデータ
 const loginData = querystring.stringify({
-    username: 'rezya-bu@mikazuki.co.jp',
-    password: 'rezya7116',
+    'authenticity_token': 'cJZXclAs8HyYi_Dj49QfegTNlBkotwGRaTo44HG5769MPN2BW7e3iqm50qRcP5hK3B6jssQdOOZAo0QB-Rmgwg', // HTMLから取得
+    'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ログインIDを設定
+    'user_session[password]': 'rezya7116', // パスワードを設定
+    'user_session[remember_me]': '0', // ログイン状態を保持するか
 });
 
-// ログインリクエストのオプション
-const loginOptions = {
+// リクエストオプション
+const options = {
     hostname: 'mikazuki.urkt.in',
-    path: '/login',
+    path: '/user_session',
     method: 'POST',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(loginData),
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', // User-Agentを追加
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Referer': 'https://mikazuki.urkt.in/login',
     },
 };
 
-// ログイン処理
-function loginAndScrape() {
-    const req = https.request(loginOptions, (res) => {
-        let loginBody = '';
+// ログインリクエスト
+const req = https.request(options, (res) => {
+    let body = '';
 
-        res.on('data', (chunk) => {
-            loginBody += chunk;
-        });
+    // レスポンスデータを収集
+    res.on('data', (chunk) => {
+        body += chunk;
+    });
 
-        res.on('end', () => {
-            console.log('ログイン成功');
-            console.log('レスポンスヘッダー:', res.headers);
+    res.on('end', () => {
+        console.log('ログインリクエスト完了');
+        console.log('ステータスコード:', res.statusCode);
+        console.log('レスポンスヘッダー:', res.headers);
 
-            console.log(loginBody)
-            
+        // レスポンスボディの内容を確認
+        console.log('レスポンスボディ:', body);
 
-            // Set-Cookieヘッダーを取得
-            const cookies = res.headers['set-cookie'];
-            if (!cookies) {
-                console.error('Cookieが取得できませんでした。');
-                return;
-            }
-
+        // Cookieを取得
+        const cookies = res.headers['set-cookie'];
+        if (cookies) {
             console.log('取得したCookie:', cookies);
 
-            // 保護されたページへアクセス
+            // 次のリクエストにCookieを使用してアクセス
             accessProtectedPage(cookies);
-        });
+        } else {
+            console.error('ログインに失敗しました。Cookieが取得できません。');
+        }
     });
+});
 
-    req.on('error', (error) => {
-        console.error('ログインエラー:', error);
-    });
+req.on('error', (e) => {
+    console.error('エラーが発生しました:', e.message);
+});
 
-    req.write(loginData);
-    req.end();
-}
+// データを送信
+req.write(loginData);
+req.end();
 
-// 保護されたページへのアクセスとスクレイピング
+// 保護されたページにアクセス
 function accessProtectedPage(cookies) {
     const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
-    const targetPath = `/reservation_ledgers/${targetDate}`;
+    const path = `/reservation_ledgers/${targetDate}`;
 
     const options = {
         hostname: 'mikazuki.urkt.in',
-        path: targetPath,
+        path: path,
         method: 'GET',
         headers: {
-            'Cookie': cookies.join('; '), // Cookieを設定
+            'Cookie': cookies.join('; '),
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         },
     };
 
-    const req = https.request(options, (res) => {
+    https.get(options, (res) => {
         let body = '';
 
         res.on('data', (chunk) => {
@@ -80,17 +83,10 @@ function accessProtectedPage(cookies) {
         });
 
         res.on('end', () => {
-            console.log('保護ページ取得成功');
-            console.log('HTML:', body); // 必要に応じて解析
+            console.log('保護されたページにアクセス成功');
+            console.log('HTML:', body); // 必要に応じてHTMLを解析
         });
+    }).on('error', (e) => {
+        console.error('保護ページアクセスエラー:', e.message);
     });
-
-    req.on('error', (error) => {
-        console.error('保護ページ取得エラー:', error);
-    });
-
-    req.end();
 }
-
-// ログインしてスクレイピング開始
-loginAndScrape();
