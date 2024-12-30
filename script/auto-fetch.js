@@ -1,16 +1,11 @@
 const https = require('https');
 const querystring = require('querystring');
-const HttpsProxyAgent = require('https-proxy-agent');
 const { JSDOM } = require('jsdom');
 
-// プロキシサーバーの設定
-const proxyURL = 'https://www.croxyproxy.com/'; // プロキシURLを指定
-const agent = new HttpsProxyAgent(proxyURL);
-
-// ログインデータ
+// ログイン用データ
 const loginData = querystring.stringify({
-    username: 'your-username', // ユーザー名を入力
-    password: 'your-password', // パスワードを入力
+    username: 'rezya-bu@mikazuki.co.jp', // ログイン用のユーザー名
+    password: 'rezya7116', // ログイン用のパスワード
 });
 
 // ログインリクエストのオプション
@@ -22,8 +17,11 @@ const loginOptions = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(loginData),
     },
-    agent, // プロキシエージェントを設定
 };
+
+// スクレイピング対象のURL
+const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
+const targetPath = `/reservation_ledgers/${targetDate}`;
 
 // ログイン処理
 function loginAndScrape() {
@@ -57,17 +55,14 @@ function loginAndScrape() {
 
 // 保護されたページへのアクセスとスクレイピング
 function accessProtectedPage(cookies) {
-    const targetDate = new Date().toISOString().split('T')[0]; // 現在の日付
-    const targetPath = `/reservation_ledgers/${targetDate}`;
-
     const options = {
         hostname: 'mikazuki.urkt.in',
         path: targetPath,
         method: 'GET',
         headers: {
-            'Cookie': cookies.join('; '), // ログイン時のCookieを設定
+            'Cookie': cookies.join('; '), // ログイン時に取得したCookieを設定
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         },
-        agent, // プロキシエージェントを設定
     };
 
     const req = https.request(options, (res) => {
