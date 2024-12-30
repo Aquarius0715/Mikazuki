@@ -32,6 +32,11 @@ function loginAndScrape() {
             console.log('ログイン成功');
             console.log('レスポンスヘッダー:', res.headers);
 
+            res.on('end', () => {
+                console.log('レスポンスボディ:', loginBody);
+            });
+            
+
             // Set-Cookieヘッダーを取得
             const cookies = res.headers['set-cookie'];
             if (!cookies) {
