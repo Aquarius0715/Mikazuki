@@ -52,6 +52,7 @@
         // 保護されたページへアクセス
         const targetDate = new Date().toISOString().split('T')[0];
         const protectedURL = `https://mikazuki.urkt.in/reservation_ledgers/${targetDate}`;
+        console.log(protectedURL)
         const protectedResponse = await fetch(protectedURL, {
             method: 'GET',
             credentials: 'include',
