@@ -7,9 +7,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORSヘッダーを追加するミドルウェア
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // 必要に応じて特定のオリジンに制限
+    const allowedOrigin = req.headers.origin || 'http://localhost:3000'; // 必要に応じてオリジンを設定
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // 特定のオリジンを許可
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // クッキーを許可
     next();
 });
 

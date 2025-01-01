@@ -9,8 +9,12 @@
         // プロキシ経由でCSRFトークンを取得
         const csrfResponse = await fetch(`${proxyBaseURL}${loginPath}`, {
             method: 'GET',
-            credentials: 'include', // Cookieを含める
+            credentials: 'include', // クッキーを含める
         });
+
+        if (!csrfResponse.ok) {
+            throw new Error(`CSRFトークン取得失敗: ${csrfResponse.status}`);
+        }
 
         const csrfText = await csrfResponse.text();
         const parser = new DOMParser();
@@ -18,8 +22,7 @@
         const csrfToken = doc.querySelector('input[name="authenticity_token"]').value;
 
         if (!csrfToken) {
-            console.error('CSRFトークンを取得できませんでした');
-            return;
+            throw new Error('CSRFトークンを取得できませんでした');
         }
 
         console.log('取得したCSRFトークン:', csrfToken);
@@ -27,9 +30,9 @@
         // ログインリクエストデータ
         const loginData = new URLSearchParams({
             'authenticity_token': csrfToken,
-            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名
-            'user_session[password]': 'rezya7116', // パスワード
-            'user_session[remember_me]': '0', // ログイン状態を保持するか
+            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名を入力
+            'user_session[password]': 'rezya7116', // パスワードを入力
+            'user_session[remember_me]': '0', // ログイン状態を保持しない
         });
 
         // プロキシ経由でログインリクエストを送信
@@ -43,10 +46,8 @@
         });
 
         if (!loginResponse.ok) {
-            console.error('ログイン失敗:', loginResponse.status);
             const errorText = await loginResponse.text();
-            console.error('エラー内容:', errorText);
-            return;
+            throw new Error(`ログイン失敗: ${loginResponse.status} - ${errorText}`);
         }
 
         console.log('ログイン成功！');
@@ -58,8 +59,7 @@
         });
 
         if (!protectedResponse.ok) {
-            console.error('保護されたページへのアクセスに失敗しました:', protectedResponse.status);
-            return;
+            throw new Error(`保護されたページへのアクセスに失敗: ${protectedResponse.status}`);
         }
 
         const protectedText = await protectedResponse.text();
