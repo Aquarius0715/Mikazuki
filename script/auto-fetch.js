@@ -7,9 +7,9 @@
         // CSRFトークンを取得
         const csrfResponse = await fetch(`${baseURL}${loginPath}`, {
             method: 'GET',
-            credentials: 'include', // クッキーを含める
+            credentials: 'include', // セッション情報を含める
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
                 'Referer': `${baseURL}${loginPath}`,
                 'Origin': baseURL,
             },
@@ -47,7 +47,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Referer': `${baseURL}${loginPath}`,
                 'Origin': baseURL,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
             },
             credentials: 'include',
             body: loginData.toString(),
