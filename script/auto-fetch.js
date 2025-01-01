@@ -30,8 +30,8 @@
         // ログインリクエストデータ
         const loginData = new URLSearchParams({
             'authenticity_token': csrfToken,
-            'user_session[login]': 'your-username', // ユーザー名を入力
-            'user_session[password]': 'your-password', // パスワードを入力
+            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名を入力
+            'user_session[password]': 'rezya7116', // パスワードを入力
             'user_session[remember_me]': '0', // ログイン状態を保持しない
         });
 
