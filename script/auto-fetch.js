@@ -8,10 +8,12 @@
         const csrfResponse = await fetch(`${baseURL}${loginPath}`, {
             method: 'GET',
             credentials: 'include', // クッキーを含める
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Referer': `${baseURL}${loginPath}`,
+                'Origin': baseURL,
+            },
         });
-
-        const setCookie = csrfResponse.headers.get('set-cookie');
-        console.log('Set-Cookie ヘッダー:', setCookie);
 
         if (!csrfResponse.ok) {
             throw new Error(`CSRFトークン取得失敗: ${csrfResponse.status}`);
@@ -43,6 +45,9 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Referer': `${baseURL}${loginPath}`,
+                'Origin': baseURL,
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             },
             credentials: 'include',
             body: loginData.toString(),
@@ -50,7 +55,7 @@
 
         if (!loginResponse.ok) {
             const errorText = await loginResponse.text();
-            console.error('レスポンスヘッダー:', loginResponse.headers);
+            console.error('レスポンスヘッダー:', Array.from(loginResponse.headers.entries()));
             throw new Error(`ログイン失敗: ${loginResponse.status} - ${errorText}`);
         }
 
