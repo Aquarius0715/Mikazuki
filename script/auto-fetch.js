@@ -1,13 +1,13 @@
 (async () => {
-    const proxyBaseURL = 'http://localhost:3000'; // プロキシサーバーのURL
+    const baseURL = 'https://mikazuki.urkt.in'; // リモートサーバーのURL
     const loginPath = '/login';
     const sessionPath = '/user_session';
     const targetDate = new Date().toISOString().split('T')[0];
     const protectedPath = `/reservation_ledgers/${targetDate}`;
 
     try {
-        // プロキシ経由でCSRFトークンを取得
-        const csrfResponse = await fetch(`${proxyBaseURL}${loginPath}`, {
+        // リモートサーバーからCSRFトークンを取得
+        const csrfResponse = await fetch(`${baseURL}${loginPath}`, {
             method: 'GET',
             credentials: 'include', // クッキーを含める
         });
@@ -30,13 +30,13 @@
         // ログインリクエストデータ
         const loginData = new URLSearchParams({
             'authenticity_token': csrfToken,
-            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名を入力
-            'user_session[password]': 'rezya7116', // パスワードを入力
+            'user_session[login]': 'your-username', // ユーザー名を入力
+            'user_session[password]': 'your-password', // パスワードを入力
             'user_session[remember_me]': '0', // ログイン状態を保持しない
         });
 
-        // プロキシ経由でログインリクエストを送信
-        const loginResponse = await fetch(`${proxyBaseURL}${sessionPath}`, {
+        // リモートサーバーにログインリクエストを送信
+        const loginResponse = await fetch(`${baseURL}${sessionPath}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -52,8 +52,8 @@
 
         console.log('ログイン成功！');
 
-        // プロキシ経由で保護されたページへアクセス
-        const protectedResponse = await fetch(`${proxyBaseURL}${protectedPath}`, {
+        // 保護されたページにアクセス
+        const protectedResponse = await fetch(`${baseURL}${protectedPath}`, {
             method: 'GET',
             credentials: 'include',
         });
