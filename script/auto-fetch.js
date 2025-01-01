@@ -1,11 +1,13 @@
 (async () => {
-    // ログインページのURLとCSRFトークン取得
-    const loginURL = 'https://mikazuki.urkt.in/login';
-    const sessionURL = 'https://mikazuki.urkt.in/user_session';
+    const proxyBaseURL = 'http://localhost:3000'; // プロキシサーバーのURL
+    const loginPath = '/login';
+    const sessionPath = '/user_session';
+    const targetDate = new Date().toISOString().split('T')[0];
+    const protectedPath = `/reservation_ledgers/${targetDate}`;
 
     try {
-        // CSRFトークンを取得
-        const csrfResponse = await fetch(loginURL, {
+        // プロキシ経由でCSRFトークンを取得
+        const csrfResponse = await fetch(`${proxyBaseURL}${loginPath}`, {
             method: 'GET',
             credentials: 'include', // Cookieを含める
         });
@@ -30,8 +32,8 @@
             'user_session[remember_me]': '0', // ログイン状態を保持するか
         });
 
-        // ログインリクエスト
-        const loginResponse = await fetch(sessionURL, {
+        // プロキシ経由でログインリクエストを送信
+        const loginResponse = await fetch(`${proxyBaseURL}${sessionPath}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,11 +51,8 @@
 
         console.log('ログイン成功！');
 
-        // 保護されたページへアクセス
-        const targetDate = new Date().toISOString().split('T')[0];
-        const protectedURL = `https://mikazuki.urkt.in/reservation_ledgers/${targetDate}`;
-        console.log(protectedURL)
-        const protectedResponse = await fetch(protectedURL, {
+        // プロキシ経由で保護されたページへアクセス
+        const protectedResponse = await fetch(`${proxyBaseURL}${protectedPath}`, {
             method: 'GET',
             credentials: 'include',
         });
