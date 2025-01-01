@@ -1,70 +1,57 @@
-(async () => {
-    const proxyBaseURL = 'http://localhost:3000'; // プロキシサーバーのURL
-    const loginPath = '/login';
-    const sessionPath = '/user_session';
-    const targetDate = new Date().toISOString().split('T')[0];
-    const protectedPath = `/reservation_ledgers/${targetDate}`;
+const express = require('express');
+const https = require('https');
+const http = require('http');
 
-    try {
-        // プロキシ経由でCSRFトークンを取得
-        const csrfResponse = await fetch(`${proxyBaseURL}${loginPath}`, {
-            method: 'GET',
-            credentials: 'include', // Cookieを含める
+const app = express();
+
+// プロキシ用にリクエストボディのパースを有効化
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// プロキシサーバーのエンドポイント
+app.all('*', (req, res) => {
+    const targetHost = 'mikazuki.urkt.in'; // 対象のサーバー
+    const options = {
+        hostname: targetHost,
+        path: req.path,
+        method: req.method,
+        headers: {
+            ...req.headers,
+            host: targetHost, // Hostヘッダーを上書き
+        },
+    };
+
+    // 対象サーバーへのリクエストをプロキシ
+    const proxy = https.request(options, (proxyRes) => {
+        let body = '';
+
+        proxyRes.on('data', (chunk) => {
+            body += chunk;
         });
 
-        const csrfText = await csrfResponse.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(csrfText, 'text/html');
-        const csrfToken = doc.querySelector('input[name="authenticity_token"]').value;
-
-        if (!csrfToken) {
-            console.error('CSRFトークンを取得できませんでした');
-            return;
-        }
-
-        console.log('取得したCSRFトークン:', csrfToken);
-
-        // ログインリクエストデータ
-        const loginData = new URLSearchParams({
-            'authenticity_token': csrfToken,
-            'user_session[login]': 'your-username', // ユーザー名
-            'user_session[password]': 'your-password', // パスワード
-            'user_session[remember_me]': '0', // ログイン状態を保持するか
+        proxyRes.on('end', () => {
+            // プロキシレスポンスをクライアントに送信
+            res.set(proxyRes.headers);
+            res.status(proxyRes.statusCode).send(body);
         });
+    });
 
-        // プロキシ経由でログインリクエストを送信
-        const loginResponse = await fetch(`${proxyBaseURL}${sessionPath}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            credentials: 'include',
-            body: loginData.toString(),
-        });
+    // プロキシリクエストのエラー処理
+    proxy.on('error', (err) => {
+        console.error('プロキシエラー:', err);
+        res.status(500).send('プロキシサーバーエラー');
+    });
 
-        if (!loginResponse.ok) {
-            console.error('ログイン失敗:', loginResponse.status);
-            const errorText = await loginResponse.text();
-            console.error('エラー内容:', errorText);
-            return;
-        }
-
-        console.log('ログイン成功！');
-
-        // プロキシ経由で保護されたページへアクセス
-        const protectedResponse = await fetch(`${proxyBaseURL}${protectedPath}`, {
-            method: 'GET',
-            credentials: 'include',
-        });
-
-        if (!protectedResponse.ok) {
-            console.error('保護されたページへのアクセスに失敗しました:', protectedResponse.status);
-            return;
-        }
-
-        const protectedText = await protectedResponse.text();
-        console.log('保護されたページのHTML:', protectedText);
-    } catch (error) {
-        console.error('エラーが発生しました:', error);
+    // リクエストボディが存在する場合、それを送信
+    if (req.body) {
+        proxy.write(JSON.stringify(req.body));
     }
-})();
+
+    proxy.end();
+});
+
+// プロキシサーバーの起動
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`プロキシサーバーが起動しました: http://localhost:${PORT}`);
+});
