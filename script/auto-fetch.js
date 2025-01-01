@@ -1,5 +1,5 @@
 (async () => {
-    const baseURL = 'https://mikazuki.urkt.in'; // サーバーのベースURL
+    const baseURL = 'https://mikazuki.urkt.in';
     const loginPath = '/login';
     const sessionPath = '/user_session';
 
@@ -9,6 +9,8 @@
             method: 'GET',
             credentials: 'include', // クッキーを含める
         });
+
+        console.log('レスポンスヘッダー:', csrfResponse.headers);
 
         if (!csrfResponse.ok) {
             throw new Error(`CSRFトークン取得失敗: ${csrfResponse.status}`);
@@ -47,6 +49,7 @@
 
         if (!loginResponse.ok) {
             const errorText = await loginResponse.text();
+            console.error('レスポンスヘッダー:', loginResponse.headers);
             throw new Error(`ログイン失敗: ${loginResponse.status} - ${errorText}`);
         }
 
