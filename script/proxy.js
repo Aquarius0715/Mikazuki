@@ -1,27 +1,30 @@
 const express = require('express');
 const https = require('https');
-const http = require('http');
-
 const app = express();
 
-// プロキシ用にリクエストボディのパースを有効化
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// プロキシサーバーのエンドポイント
+// CORSヘッダーを追加するミドルウェア
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // 必要に応じて特定のオリジンに制限
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
+// プロキシエンドポイント
 app.all('*', (req, res) => {
-    const targetHost = 'mikazuki.urkt.in'; // 対象のサーバー
     const options = {
-        hostname: targetHost,
+        hostname: 'mikazuki.urkt.in',
         path: req.path,
         method: req.method,
         headers: {
             ...req.headers,
-            host: targetHost, // Hostヘッダーを上書き
+            host: 'mikazuki.urkt.in',
         },
     };
 
-    // 対象サーバーへのリクエストをプロキシ
     const proxy = https.request(options, (proxyRes) => {
         let body = '';
 
@@ -30,19 +33,16 @@ app.all('*', (req, res) => {
         });
 
         proxyRes.on('end', () => {
-            // プロキシレスポンスをクライアントに送信
             res.set(proxyRes.headers);
             res.status(proxyRes.statusCode).send(body);
         });
     });
 
-    // プロキシリクエストのエラー処理
     proxy.on('error', (err) => {
         console.error('プロキシエラー:', err);
         res.status(500).send('プロキシサーバーエラー');
     });
 
-    // リクエストボディが存在する場合、それを送信
     if (req.body) {
         proxy.write(JSON.stringify(req.body));
     }
@@ -50,7 +50,6 @@ app.all('*', (req, res) => {
     proxy.end();
 });
 
-// プロキシサーバーの起動
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`プロキシサーバーが起動しました: http://localhost:${PORT}`);
