@@ -10,7 +10,8 @@
             credentials: 'include', // クッキーを含める
         });
 
-        console.log('レスポンスヘッダー:', csrfResponse.headers);
+        const setCookie = csrfResponse.headers.get('set-cookie');
+        console.log('Set-Cookie ヘッダー:', setCookie);
 
         if (!csrfResponse.ok) {
             throw new Error(`CSRFトークン取得失敗: ${csrfResponse.status}`);
@@ -30,8 +31,8 @@
         // ログインリクエストデータ
         const loginData = new URLSearchParams({
             'authenticity_token': csrfToken,
-            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ユーザー名
-            'user_session[password]': 'rezya7116', // パスワード
+            'user_session[login]': 'rezya-bu@mikazuki.co.jp',
+            'user_session[password]': 'rezya7116',
             'user_session[remember_me]': '0',
         });
 
