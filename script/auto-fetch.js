@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const { JSDOM } = require('jsdom');
+import fetch from 'node-fetch';
+import { JSDOM } from 'jsdom';
 
 (async () => {
     const baseURL = 'https://mikazuki.urkt.in';
