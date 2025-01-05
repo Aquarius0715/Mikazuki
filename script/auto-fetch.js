@@ -1,81 +1,35 @@
-import fetch from 'node-fetch';
-import { JSDOM } from 'jsdom';
+const puppeteer = require('puppeteer');
 
 (async () => {
-    const baseURL = 'https://mikazuki.urkt.in';
-    const loginPath = '/login';
-    const sessionPath = '/user_session';
-    const protectedPath = '/reservation_ledgers/2025-01-03'; // 保護されたページのパス（例）
+    const browser = await puppeteer.launch({ headless: false }); // ヘッドレスモードを無効化してブラウザを表示
+    const page = await browser.newPage();
 
-    try {
-        // 1. ログインページにアクセスしてCSRFトークンを取得
-        const csrfResponse = await fetch(`${baseURL}${loginPath}`, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            },
-        });
+    // 1. ログインページにアクセス
+    await page.goto('https://mikazuki.urkt.in/login', { waitUntil: 'networkidle2' });
 
-        if (!csrfResponse.ok) {
-            throw new Error(`CSRFトークン取得失敗: ${csrfResponse.status}`);
-        }
+    // 2. ログイン情報を入力して送信
+    await page.type('input[name="user_session[login]"]', 'rezya-bu@mikazuki.co.jp'); // ログインID
+    await page.type('input[name="user_session[password]"]', 'rezya7116'); // パスワード
+    await page.click('input[type="submit"]'); // ログインボタンをクリック
+    await page.waitForNavigation(); // 次のページに移動するまで待機
 
-        const csrfText = await csrfResponse.text();
-        const dom = new JSDOM(csrfText);
-        const csrfToken = dom.window.document.querySelector('meta[name="csrf-token"]').content;
+    console.log('ログイン成功！');
 
-        if (!csrfToken) {
-            throw new Error('CSRFトークンを取得できませんでした');
-        }
+    // 3. 保護されたページに移動
+    const targetDate = new Date().toISOString().split('T')[0]; // 今日の日付を自動で設定
+    const targetURL = `https://mikazuki.urkt.in/reservation_ledgers/${targetDate}`;
+    await page.goto(targetURL, { waitUntil: 'networkidle2' });
 
-        console.log('取得したCSRFトークン:', csrfToken);
+    // 4. ページのデータを取得
+    const data = await page.evaluate(() => {
+        // テーブルデータを抽出
+        return [...document.querySelectorAll('table tr')].map(row =>
+            [...row.querySelectorAll('td, th')].map(cell => cell.textContent.trim())
+        );
+    });
 
-        // 2. ログインリクエストデータを作成
-        const loginData = new URLSearchParams({
-            'authenticity_token': csrfToken,
-            'user_session[login]': 'rezya-bu@mikazuki.co.jp', // ログインID
-            'user_session[password]': 'rezya7116', // パスワード
-            'user_session[remember_me]': '0',
-        });
+    console.log('取得したデータ:', data);
 
-        // 3. ログインリクエストを送信
-        const loginResponse = await fetch(`${baseURL}${sessionPath}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Referer': `${baseURL}${loginPath}`,
-                'Origin': baseURL,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            },
-            body: loginData.toString(),
-        });
-
-        if (loginResponse.status !== 302) {
-            const errorText = await loginResponse.text();
-            throw new Error(`ログイン失敗: ${loginResponse.status} - ${errorText}`);
-        }
-
-        console.log('ログイン成功！');
-
-        // 4. 保護されたページにアクセス
-        const cookies = loginResponse.headers.get('set-cookie');
-        const protectedResponse = await fetch(`${baseURL}${protectedPath}`, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                'Referer': `${baseURL}/login`,
-                'Cookie': cookies,
-            },
-        });
-
-        if (!protectedResponse.ok) {
-            throw new Error(`保護されたページへのアクセスに失敗: ${protectedResponse.status}`);
-        }
-
-        const text = await protectedResponse.text();
-        console.log('保護されたページのHTML:', text);
-
-    } catch (error) {
-        console.error('エラーが発生しました:', error);
-    }
+    // 5. ブラウザを閉じる
+    await browser.close();
 })();
