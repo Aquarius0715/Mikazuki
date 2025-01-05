@@ -64,4 +64,7 @@ if "%CURRENT_BRANCH%"=="%BRANCH2%" (
 :: トグル対象外のブランチの場合
 echo 現在のブランチはトグル対象外の ^"%CURRENT_BRANCH%^" です。
 echo トグル対象のブランチは ^"%BRANCH1%^" または ^"%BRANCH2%^" です。
+
+pause >nul
+
 exit /b 1
