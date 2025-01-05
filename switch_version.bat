@@ -12,7 +12,7 @@ set BRANCH2=busy-season-version
 git rev-parse --is-inside-work-tree >nul 2>&1
 if errorlevel 1 (
     echo 現在のディレクトリはGitリポジトリではありません。
-    echo 何かを押してください...
+    echo 続行するには何かキーをおしてください
     pause >nul
     exit /b 1
 )
@@ -22,7 +22,7 @@ echo リモートリポジトリから最新情報を取得中...
 git fetch --all
 if errorlevel 1 (
     echo フェッチに失敗しました。
-    echo 何かを押してください...
+    echo 続行するには何かキーをおしてください
     pause >nul
     exit /b 1
 )
@@ -36,7 +36,7 @@ if "%CURRENT_BRANCH%"=="%BRANCH1%" (
     git checkout %BRANCH2%
     if errorlevel 1 (
         echo ブランチの切り替えに失敗しました。
-        echo 何かを押してください...
+        echo 続行するには何かキーをおしてください
         pause >nul
         exit /b 1
     )
@@ -44,12 +44,12 @@ if "%CURRENT_BRANCH%"=="%BRANCH1%" (
     git pull
     if errorlevel 1 (
         echo プルに失敗しました。
-        echo 何かを押してください...
+        echo 続行するには何かキーをおしてください
         pause >nul
         exit /b 1
     )
     echo ブランチ ^"%BRANCH2%^" に切り替え、最新の変更を取得しました。
-    echo 何かを押してください...
+    echo 続行するには何かキーをおしてください
     pause >nul
     exit /b 0
 )
@@ -59,7 +59,7 @@ if "%CURRENT_BRANCH%"=="%BRANCH2%" (
     git checkout %BRANCH1%
     if errorlevel 1 (
         echo ブランチの切り替えに失敗しました。
-        echo 何かを押してください...
+        echo 続行するには何かキーをおしてください
         pause >nul
         exit /b 1
     )
@@ -67,12 +67,12 @@ if "%CURRENT_BRANCH%"=="%BRANCH2%" (
     git pull
     if errorlevel 1 (
         echo プルに失敗しました。
-        echo 何かを押してください...
+        echo 続行するには何かキーをおしてください
         pause >nul
         exit /b 1
     )
     echo ブランチ ^"%BRANCH1%^" に切り替え、最新の変更を取得しました。
-    echo 何かを押してください...
+    echo 続行するには何かキーをおしてください
     pause >nul
     exit /b 0
 )
@@ -81,6 +81,6 @@ if "%CURRENT_BRANCH%"=="%BRANCH2%" (
 echo 現在のブランチはトグル対象外の ^"%CURRENT_BRANCH%^" です。
 echo トグル対象のブランチは ^"%BRANCH1%^" または ^"%BRANCH2%^" です。
 
-echo 何かを押してください...
+echo 続行するには何かキーをおしてください
 pause >nul
 exit /b 1
