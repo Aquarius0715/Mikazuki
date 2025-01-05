@@ -35,7 +35,9 @@ const puppeteer = require('puppeteer');
     } else {
         console.log('取得したテーブルデータ:', tableData);
     }
-
     // 5. ブラウザを閉じる
     await browser.close();
+
+    const buttons = document.querySelectorAll('#argo_screen .time-item');
+    
 })();
