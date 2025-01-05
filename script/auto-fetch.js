@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false }); // ヘッドレスモードを無効化してブラウザを表示
+    const browser = await puppeteer.launch({ headless: true }); // ヘッドレスモードを有効化
     const page = await browser.newPage();
 
     // 1. ログインページにアクセス
