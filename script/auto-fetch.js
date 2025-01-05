@@ -20,15 +20,21 @@ const puppeteer = require('puppeteer');
     const targetURL = `https://mikazuki.urkt.in/reservation_ledgers/${targetDate}`;
     await page.goto(targetURL, { waitUntil: 'networkidle2' });
 
-    // 4. ページのデータを取得
-    const data = await page.evaluate(() => {
-        // テーブルデータを抽出
-        return [...document.querySelectorAll('table tr')].map(row =>
+    // 4. 特定のクラスのテーブルを抽出
+    const tableData = await page.evaluate(() => {
+        const table = document.querySelector('table.ui.celled.unstackable.table'); // クラス名でテーブルを選択
+        if (!table) return null; // テーブルが存在しない場合はnullを返す
+
+        return [...table.querySelectorAll('tr')].map(row =>
             [...row.querySelectorAll('td, th')].map(cell => cell.textContent.trim())
         );
     });
 
-    console.log('取得したデータ:', data);
+    if (!tableData) {
+        console.error('指定されたクラスのテーブルが見つかりませんでした');
+    } else {
+        console.log('取得したテーブルデータ:', tableData);
+    }
 
     // 5. ブラウザを閉じる
     await browser.close();
