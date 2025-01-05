@@ -5,8 +5,8 @@ chcp 65001 >nul
 :: 2つのブランチをプルし、それぞれの最新状態を維持するスクリプト
 
 :: トグル対象のブランチを指定
-set BRANCH1=main
-set BRANCH2=feature-branch
+set BRANCH1=normal-season-version
+set BRANCH2=busy-season-version
 
 :: Gitリポジトリであることを確認
 git rev-parse --is-inside-work-tree >nul 2>&1
