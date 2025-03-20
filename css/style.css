@@ -177,7 +177,7 @@ body {
     padding: 20px;
     cursor: pointer;
     margin-top: 20px;
-    width: fit-content;
+    width: 1000px;
     display: inline-block;
 }
 .wait-time:hover {

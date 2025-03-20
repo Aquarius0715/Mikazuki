@@ -28,16 +28,18 @@ function toggleStateArgo(element) {
     }
 }
 
-const waitTimes = [0, 5, 15, 30];
+const waitTimeLabels = ["0分", "約5分", "約15分", "30分以上"];
 
 function toggleWaitTime() {
     const waitTimeElement = document.getElementById("dragon_wait_time");
-    let currentTime = parseInt(waitTimeElement.textContent.replace("分待ち", ""), 10);
+    let currentTimeText = waitTimeElement.textContent;
 
-    // 次の待ち時間を取得
-    let nextIndex = (waitTimes.indexOf(currentTime) + 1) % waitTimes.length;
-    let nextTime = waitTimes[nextIndex];
-
+    // 現在の表示からインデックスを取得
+    let currentIndex = waitTimeLabels.indexOf(currentTimeText);
+    
+    // 次のインデックスを計算
+    let nextIndex = (currentIndex + 1) % waitTimeLabels.length;
+    
     // 更新
-    waitTimeElement.textContent = nextTime + "分待ち";
+    waitTimeElement.textContent = waitTimeLabels[nextIndex];
 }
