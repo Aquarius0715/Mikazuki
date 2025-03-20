@@ -57,7 +57,7 @@ body {
 }
 .dragon_circuit_image {
     width: auto;
-    height: 300px;
+    height: 220px;
 }
 .time-item {
     display: flex;
@@ -156,7 +156,7 @@ body {
 .screen {
     display: none;
     width: 1280px;
-    height: 900px;
+    height: 800px;
     padding: 20px;
     border: 1px solid #ddd;
     align-items: center;
@@ -170,14 +170,14 @@ body {
     display: block;
 }
 .wait-time {
-    font-size: 200px;
+    font-size: 150px;
     font-weight: bold;
     background-color: #f4f4f4;
     border-radius: 10px;
     padding: 20px;
     cursor: pointer;
     margin-top: 20px;
-    width: 1000px;
+    width: 800px;
     display: inline-block;
 }
 .wait-time:hover {
