@@ -5,10 +5,23 @@ const screenIntervals = {
     "dragon_circuit_screen": 5000
 };
 let currentScreenIndex = 0;
-let timeoutId;
+let timeoutId = null;
+
+function nextScreen() {
+    // 現在の画面を非表示
+    screens[currentScreenIndex].classList.remove('active');
+
+    // 次の画面を計算
+    currentScreenIndex = (currentScreenIndex + 1) % screens.length;
+    const nextScreen = screens[currentScreenIndex];
+
+    // 次の画面を表示
+    nextScreen.classList.add('active');
+}
 
 function switchScreen() {
-    stopSwitching()
+    if (!timeoutId) return; // 停止状態なら何もしない
+
     // 現在の画面を非表示
     screens[currentScreenIndex].classList.remove('active');
 
@@ -29,7 +42,7 @@ function switchScreen() {
 // 自動遷移の開始
 function startSwitching() {
     if (!timeoutId) {
-        switchScreen();
+        timeoutId = setTimeout(switchScreen, screenIntervals[screens[currentScreenIndex].id] || 10000);
     }
 }
 

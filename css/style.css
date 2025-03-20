@@ -156,7 +156,7 @@ body {
 .screen {
     display: none;
     width: 1280px;
-    height: 750px;
+    height: 800px;
     padding: 20px;
     border: 1px solid #ddd;
     align-items: center;
