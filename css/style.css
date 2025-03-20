@@ -55,6 +55,10 @@ body {
     width: auto;
     height: 150px;
 }
+.dragon_circuit_image {
+    width: auto;
+    height: 300px;
+}
 .time-item {
     display: flex;
     justify-content: space-between;
@@ -152,6 +156,7 @@ body {
 .screen {
     display: none;
     width: 1280px;
+    height: 900px;
     padding: 20px;
     border: 1px solid #ddd;
     align-items: center;
@@ -163,4 +168,18 @@ body {
 }
 .screen.active {
     display: block;
+}
+.wait-time {
+    font-size: 200px;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: fit-content;
+    display: inline-block;
+}
+.wait-time:hover {
+    background-color: #ddd;
 }
