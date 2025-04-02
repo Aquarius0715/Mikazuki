@@ -28,7 +28,7 @@ function toggleStateArgo(element) {
     }
 }
 
-const waitTimeLabels = ["0分", "約5分", "約15分", "30分以上"];
+const waitTimeLabels = ["0分", "約10分", "約20分", "30分以上"];
 
 function toggleWaitTime() {
     const waitTimeElement = document.getElementById("dragon_wait_time");
