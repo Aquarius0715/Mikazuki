@@ -2,7 +2,8 @@ const screens = document.querySelectorAll('.screen');
 const screenIntervals = {
     "argo_screen": 10000,
     "buggy_screen": 10000,
-    "dragon_circuit_screen": 5000
+    "dragon_circuit_screen": 5000,
+    "navigation_screen": 8000   // ← 追加（表示時間は好みで調整）
 };
 let currentScreenIndex = 0;
 let timeoutId = null;

@@ -183,3 +183,181 @@ body {
 .wait-time:hover {
     background-color: #ddd;
 }
+
+/* ===== Navigation Screen (scoped) ===== */
+/* 画面共通の変数は #navigation_screen に限定して衝突回避 */
+#navigation_screen {
+  --nav-gap: 3rem;
+  --nav-padding: 2rem;
+  --nav-vmin: 70vh;           /* 既存の見え方を維持 */
+  --nav-divider-width: 6px;
+  --nav-divider-offset: 5%;
+  --nav-card-radius: 16px;
+  --nav-card-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  --nav-card-border: 1px solid rgba(0,0,0,0.06);
+  --nav-arrow-stroke: 6;
+  --nav-arrow-color: #000;
+  --nav-arrow-shadow: 0 8px 20px rgba(0,0,0,.18);
+  --nav-nudge-distance: 8px;
+  --nav-anim-duration: 3.5s;
+  --nav-left-nudge: 175px;   /* 左カードの上下オフセット（+で下、–で上） */
+  --nav-right-nudge: 0px;  /* 右カードの上下オフセット（+で下、–で上） */
+  --dragon-x: 0px;  /* 左右：+で右 / −で左 */
+  --dragon-y: 100px;  /* 上下：+で下  / −で上 */
+}
+
+#navigation_screen .navigation-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch; /* ← center ではなく stretch に */
+  gap: var(--nav-gap);
+  padding: var(--nav-padding);
+  min-height: var(--nav-vmin);
+}
+
+/* 中央の黒い縦線 */
+#navigation_screen .navigation-layout::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: var(--nav-divider-offset);
+  bottom: var(--nav-divider-offset);
+  width: var(--nav-divider-width);
+  background: #000;
+  transform: translateX(-50%);
+  border-radius: calc(var(--nav-divider-width) / 2);
+}
+
+#navigation_screen .nav-left,
+#navigation_screen .nav-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* 中身は中央寄せのまま */
+  justify-content: flex-start; /* 上詰め */
+  height: 100%;          /* Grid行の高さいっぱいに伸ばす */
+}
+
+#navigation_screen .nav-left .nav-card {
+  transform: translateY(var(--nav-left-nudge));
+  transition: transform 200ms ease; /* 任意：微妙にスムーズに */
+}
+
+#navigation_screen .nav-right .nav-card {
+  transform: translateY(var(--nav-right-nudge));
+  transition: transform 200ms ease; /* 任意 */
+}
+
+#navigation_screen .nav-image {
+  max-width: 90%;
+  max-height: 32vh;
+  object-fit: contain;
+}
+
+#navigation_screen .nav-image-small {
+  max-height: 22vh;
+  margin-bottom: 1.25rem;
+}
+
+/* 画像直下などで使うプレーンなラベル（必要箇所のみ） */
+#navigation_screen .nav-label {
+  margin-top: 0.75rem;
+  font-size: clamp(20px, 2.4vw, 40px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ===== Navigation Screen: 白いボックス ===== */
+#navigation_screen .nav-card {
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: var(--nav-card-radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--nav-card-shadow);
+  border: var(--nav-card-border);
+  width: min(520px, 90%);
+  text-align: center;
+  align-self: center;
+  transform: translateY(var(--nav-nudge, 100px)); /* 正:下へ / 負:上へ */
+}
+
+#navigation_screen .nav-card .nav-label {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 42px);
+  font-weight: 800;
+  color: #000;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+#navigation_screen .nav-card .nav-arrow {
+  margin-top: .25rem; /* 重複定義を一本化 */
+}
+
+/* ===== Arrows (SVG) ===== */
+#navigation_screen .arrow {
+  display: block;
+  width: clamp(80px, 12vw, 180px);
+  height: clamp(80px, 12vw, 180px);
+  filter: drop-shadow(var(--nav-arrow-shadow));
+}
+
+#navigation_screen .arrow path {
+  fill: none;
+  stroke: var(--nav-arrow-color);
+  stroke-width: var(--nav-arrow-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 誘目アニメーション（ほどよく） */
+@keyframes nav-nudge-right {
+  0%, 70%, 100% { transform: translateX(0); }
+  75% { transform: translateX(var(--nav-nudge-distance)); }
+  80% { transform: translateX(0); }
+  85% { transform: translateX(var(--nav-nudge-distance)); }
+  90% { transform: translateX(0); }
+}
+@keyframes nav-nudge-left {
+  0%, 70%, 100% { transform: translateX(0); }
+  75% { transform: translateX(calc(-1 * var(--nav-nudge-distance))); }
+  80% { transform: translateX(0); }
+  85% { transform: translateX(calc(-1 * var(--nav-nudge-distance))); }
+  90% { transform: translateX(0); }
+}
+
+#navigation_screen .arrow-right { animation: nav-nudge-right var(--nav-anim-duration) ease-in-out infinite; }
+#navigation_screen .arrow-left  { animation: nav-nudge-left  var(--nav-anim-duration) ease-in-out infinite; }
+
+/* タッチ時のフィードバック */
+#navigation_screen .arrow:active { transform: scale(1.05); }
+
+/* ===== Navigation Responsive ===== */
+@media (max-width: 768px) {
+  #navigation_screen .navigation-layout { align-items: start; }
+  #navigation_screen .nav-left,
+  #navigation_screen .nav-right { height: auto; }
+  #navigation_screen .nav-card { margin-top: 1rem; } /* 通常の間隔に戻す */
+}
+
+/* 矢印コンテナを中央寄せ */
+#navigation_screen .nav-card .nav-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* 念のためSVG自体も中央に */
+#navigation_screen .nav-card .arrow {
+  margin: 0 auto;
+}
+
+#navigation_screen .dragon_circuit_image {
+  width: auto;
+  height: 220px;
+  max-height: none;  /* nav-imageの32vh上限を解除（必要なら） */
+  transform: translate(var(--dragon-x), var(--dragon-y));
+}

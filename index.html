@@ -26,7 +26,7 @@
                 <span class="full">×<br>満席　　</span>
                 <span class="unavailable">ー<br>利用不可</span>
             </div>
-            <div class="column-subtitle">　</div>
+            <div class="column-subtitle">３歳からご利用可能</div>
             <div class="box">
                 <div class="column">
                     <div class="time-item">
@@ -167,6 +167,52 @@
             <div class="column-title">只今の待ち時間</div>
             <div class="wait-time" id="dragon_wait_time" onclick="toggleWaitTime()">0分</div>
         </div>
+<div class="screen" id="navigation_screen">
+  <div class="navigation-layout">
+    <!-- 左エリア：ドラゴンサーキット -->
+    <div class="nav-left">
+      <span onclick="toggleControlButtons()">
+        <img src="image/dragon_circuit_image.png" alt="ドラゴンサーキット" class="dragon_circuit_image nav-image">
+      </span>
+
+<div class="nav-card">
+  <div class="nav-label">ドラゴンサーキット受付</div>
+  <div class="nav-arrow" aria-hidden="true">
+    <svg class="arrow arrow-left" viewBox="0 0 64 64">
+      <path d="M56 32H16" />
+      <path d="M28 16L8 32 28 48" />
+    </svg>
+  </div>
+</div>
+
+    </div>
+
+    <!-- 右エリア：アーゴ＋バギー（縦2つ） -->
+    <div class="nav-right">
+      <span onclick="toggleControlButtons()">
+        <img src="image/argo_image.png" alt="アーゴ陸上探検ツアー" class="argo_image nav-image nav-image-small">
+      </span>
+      <span onclick="toggleControlButtons()">
+        <img src="image/buggy_image.png" alt="フィールドバギー" class="buggy_image nav-image nav-image-small">
+      </span>
+
+      <!-- ★ 白いボックス -->
+<div class="nav-card">
+  <div class="nav-label">バギー・アーゴ受付</div>
+  <div class="nav-arrow" aria-hidden="true">
+    <svg class="arrow arrow-right" viewBox="0 0 64 64">
+      <!-- shaft -->
+      <path d="M8 32H48" />
+      <!-- head -->
+      <path d="M36 16L56 32 36 48" />
+    </svg>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+
     </div>
 
     <script src="script/switchScreen.js"></script>
