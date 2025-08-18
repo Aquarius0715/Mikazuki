@@ -200,7 +200,7 @@ body {
   --nav-arrow-shadow: 0 8px 20px rgba(0,0,0,.18);
   --nav-nudge-distance: 8px;
   --nav-anim-duration: 3.5s;
-  --nav-left-nudge: 175px;   /* 左カードの上下オフセット（+で下、–で上） */
+  --nav-left-nudge: 145px;   /* 左カードの上下オフセット（+で下、–で上） */
   --nav-right-nudge: 0px;  /* 右カードの上下オフセット（+で下、–で上） */
   --dragon-x: 0px;  /* 左右：+で右 / −で左 */
   --dragon-y: 100px;  /* 上下：+で下  / −で上 */
@@ -240,7 +240,7 @@ body {
 
 #navigation_screen .nav-left .nav-card {
   transform: translateY(var(--nav-left-nudge));
-  transition: transform 200ms ease; /* 任意：微妙にスムーズに */
+  transition: transform 150ms ease; /* 任意：微妙にスムーズに */
 }
 
 #navigation_screen .nav-right .nav-card {
