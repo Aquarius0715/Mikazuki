@@ -5,8 +5,8 @@ chcp 65001 >nul
 :: フェッチとプルを行いながらブランチをトグルするスクリプト
 
 :: トグル対象のブランチを指定
-set BRANCH1=normal-season-version
-set BRANCH2=busy-season-version
+set BRANCH1=2025_summer_45
+set BRANCH2=2025_summer_35
 
 :: Gitリポジトリであることを確認
 git rev-parse --is-inside-work-tree >nul 2>&1
