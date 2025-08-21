@@ -1,4 +1,9 @@
 # /data/schedule.yaml
+
+# state（初期状態）は以下の記号をコピペしてください
+
+# 空席　〇
+# 利用不可　ー
 argo:
   slots:
     - { time: "11:45",  state: "〇" }
