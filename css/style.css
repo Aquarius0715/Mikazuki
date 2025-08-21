@@ -19,14 +19,16 @@ body {
 }
 .box {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(var(--cols, 1), auto);
     gap: 20px;
+    justify-content: center;
 }
 .buggy_box {
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, auto));
     gap: 20px;
-    margin-top: 0px; 
+    margin-top: 0px;
+    justify-content: center;
 }
 .column {
     width: 250px;

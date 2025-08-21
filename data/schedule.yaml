@@ -1,0 +1,31 @@
+# /data/schedule.yaml
+argo:
+  slots:
+    - { time: "11:45",  state: "〇" }
+    - { time: "10:00", state: "〇" }
+    - { time: "10:30", state: "〇" }
+    - { time: "11:00", state: "〇" }
+    - { time: "11:30", state: "〇" }
+    - { time: "12:00", state: "〇" }
+    - { time: "12:30", state: "〇" }
+    - { time: "13:00", state: "〇" }
+    - { time: "13:30", state: "〇" }
+    - { time: "14:00", state: "〇" }
+    - { time: "14:30", state: "〇" }
+    - { time: "15:00", state: "〇" }
+    - { time: "15:30", state: "〇" }
+    - { time: "16:00", state: "〇" }
+    - { time: "16:30", state: "ー" }
+
+buggy:
+  slots:
+    - { time: "9:45",  state: "〇" }
+    - { time: "10:30", state: "〇" }
+    - { time: "11:15", state: "〇" }
+    - { time: "12:00", state: "〇" }
+    - { time: "12:45", state: "〇" }
+    - { time: "13:30", state: "〇" }
+    - { time: "14:15", state: "〇" }
+    - { time: "15:00", state: "〇" }
+    - { time: "15:45", state: "〇" }
+    - { time: "16:30", state: "〇" }

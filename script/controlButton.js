@@ -48,12 +48,8 @@ function toggleVisibility() {
                     let buttonDate = new Date();
                     buttonDate.setHours(hour, minute, 0, 0);
 
-                    if (button.getAttribute("id") === "buggy_time") {
-                        if (buttonTime === "9:40") {
-                            buttonDate -= 13 * 60 * 1000;
-                        } else {
-                            buttonDate -= 15 * 60 * 1000;
-                        }
+                    if (button.getAttribute("data-ride") === "buggy") {
+                        buttonDate -= 15 * 60 * 1000;
                     }
         
                     if (now > buttonDate) {
